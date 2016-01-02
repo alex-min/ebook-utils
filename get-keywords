@@ -27,4 +27,18 @@ VERB_FR="[èêeé]tre|[èêeé]tes|avoir|faire|dire|pouvoir|aller|voir|savoir|vo
 USELESS_FR="plus|un|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|mille|presque|elle|nous|semble|presence|entre|vers|fois|nettement|visible|m[eê]me|bien|peu[tx]|leur|comme|présente|moyenne|cette|cette|pourquoi|ecrire|première|tr[èeé]s|puis|cours|d[eé]duire|complexe|quel|pour|permet|poids|isbn|temps|ceci|cr[ée]er|premier|compte|tr[eéè]s|mois|voici|cent|ceux|m[éeè]me|vien[st]|jusqu|trouve|ques|demeure|jour|grâce|possède|derni[èe]res|t[èe]me|trouv[éeè]|mieux|immense|eues|quoi|pris|pr[éeè]sence|réussi|plut[ôo]t|n[èeè]tes|r[éeè]v[èeé]le|gros|vous|celui|votre|rien|moments|moyen|l[éeè]g[éeè]rement|exemple|peuvent|r[ôo]le|terme|obtien[st]|seulement|seul|sens|stimulée|chose|veu[xt]|pouvez|trop|d[éèe]j[àa]|pr[eèê][st]|procure|venez|utile|tirer|utilis[ée]|dernier(s)?|probl[èe]me(s)?|simule[rz]?|tel(s)?"
 USELESS="(^1)|(^2)|$EN_TOP_100|$NUMBERS_EN|$USELESS_EN|$MONTHS_EN|$VERBS_EN|$EN_TOP_100_ADJECTIVES|$EN_VERBS_TOP_100|$USELESS_FR|$VERB_FR"
 
-cat /dev/stdin | tr [:space:] '\n'  | sort | grep -iE '^[a-z]{4,}$' | tr '[:upper:]' '[:lower:]' | uniq -c | sed 's/^ *//g' | sort -bnr | grep -vE "$USELESS" | head -n20 | cut -d ' ' -f2
+FILE="/dev/stdin"
+if [ "$#" -eq 1 ]; then 
+    FILE=$1
+fi
+[ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "-v" ] || [ "$1" = '--version'] && (
+    die "
+-----
+USAGE:
+- $0 [text file]
+- cat /path/to/file | $0
+
+"
+)
+
+cat "$FILE" | tr [:space:] '\n'  | sort | grep -iE '^[a-z]{4,}$' | tr '[:upper:]' '[:lower:]' | uniq -c | sed 's/^ *//g' | sort -bnr | grep -vE "$USELESS" | head -n20 | cut -d ' ' -f2
