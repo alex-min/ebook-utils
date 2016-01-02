@@ -11,8 +11,7 @@ die () {
     echo >&2 "$@"
     exit 1
 }
-
-[ "$#" -eq 1 ] || die "USAGE:$0 [file.pdf]"
+# remove useless words
 MONTHS_EN="january|february|march|april|may|june|july|august|september|october|november|december"
 NUMBERS_EN="one|two|three|four|five|six|seven|eight|nine|ten"
 EN_TOP_100="the|be|of|and|a|to|in|he|have|it|that|for|they|I|with|as|not|on|she|at|by|this|we|you|do|but|from|or|which|one|would|all|will|there|say|who|make|when|can|more|if|no|man|out|other|so|what|time|up|go|about|than|into|could|state|only|new|year|some|take|come|these|know|see|use|get|like|then|first|any|work|now|may|such|give|over|think|most|even|find|day|also|after|way|many|must|look|before|great|back|through|long|where|much|should|well|people|down|own|just|because|good|each|those|feel|seem|how|high|too|place|little|world|very|still|nation|hand|old|life|tell|write|become|here|show|house|both|between|need|mean|call|develop|under|last|right|move|thing|general|school|never|same|another|begin|while|number|part|turn|real|leave|might|want|point|form|off|child|few|small|since|against|ask|late|home|interest|large|person|end|open|public|follow|during|present|without|again|hold|govern|around|possible|head|consider|word|program|problem|however|lead|system|set|order|eye|plan|run|keep|face|fact|group|play|stand|increase|early|course|change|help|line"
@@ -28,4 +27,4 @@ VERB_FR="[èêeé]tre|[èêeé]tes|avoir|faire|dire|pouvoir|aller|voir|savoir|vo
 USELESS_FR="plus|un|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|mille|presque|elle|nous|semble|presence|entre|vers|fois|nettement|visible|m[eê]me|bien|peu[tx]|leur|comme|présente|moyenne|cette|cette|pourquoi|ecrire|première|tr[èeé]s|puis|cours|d[eé]duire|complexe|quel|pour|permet|poids|isbn|temps|ceci|cr[ée]er|premier|compte|tr[eéè]s|mois|voici|cent|ceux|m[éeè]me|vien[st]|jusqu|trouve|ques|demeure|jour|grâce|possède|derni[èe]res|t[èe]me|trouv[éeè]|mieux|immense|eues|quoi|pris|pr[éeè]sence|réussi|plut[ôo]t|n[èeè]tes|r[éeè]v[èeé]le|gros|vous|celui|votre|rien|moments|moyen|l[éeè]g[éeè]rement|exemple|peuvent|r[ôo]le|terme|obtien[st]|seulement|seul|sens|stimulée|chose|veu[xt]|pouvez|trop|d[éèe]j[àa]|pr[eèê][st]|procure|venez|utile|tirer|utilis[ée]|dernier(s)?|probl[èe]me(s)?|simule[rz]?|tel(s)?"
 USELESS="(^1)|(^2)|$EN_TOP_100|$NUMBERS_EN|$USELESS_EN|$MONTHS_EN|$VERBS_EN|$EN_TOP_100_ADJECTIVES|$EN_VERBS_TOP_100|$USELESS_FR|$VERB_FR"
 
-pdftotext "$1"  - | tr [:space:] '\n'  | sort | grep -iE '^[a-z]{4,}$' | tr '[:upper:]' '[:lower:]' | uniq -c | sed 's/^ *//g' | sort -bnr | grep -vE "$USELESS" | head -n20 | cut -d ' ' -f2
+cat /dev/stdin | tr [:space:] '\n'  | sort | grep -iE '^[a-z]{4,}$' | tr '[:upper:]' '[:lower:]' | uniq -c | sed 's/^ *//g' | sort -bnr | grep -vE "$USELESS" | head -n20 | cut -d ' ' -f2
