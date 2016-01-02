@@ -30,15 +30,15 @@ USELESS="(^1)|(^2)|$EN_TOP_100|$NUMBERS_EN|$USELESS_EN|$MONTHS_EN|$VERBS_EN|$EN_
 FILE="/dev/stdin"
 if [ "$#" -eq 1 ]; then 
     FILE=$1
-fi
-[ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "-v" ] || [ "$1" = '--version'] && (
-    die "
+    [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "-v" ] || [ "$1" = '--version'] && (
+	die "
 -----
 USAGE:
 - $0 [text file]
 - cat /path/to/file | $0
 
-"
-)
+";
+    )
+fi
 
 cat "$FILE" | tr [:space:] '\n'  | sort | grep -iE '^[a-z]{4,}$' | tr '[:upper:]' '[:lower:]' | uniq -c | sed 's/^ *//g' | sort -bnr | grep -vE "$USELESS" | head -n20 | cut -d ' ' -f2
